@@ -1,5 +1,10 @@
 import { getFormStats } from "@/actions/form";
-import { LucideView } from "lucide-react";
+import {
+  ClipboardListIcon,
+  LucideView,
+  MousePointerClickIcon,
+  TrendingUpDownIcon,
+} from "lucide-react";
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
@@ -18,16 +23,16 @@ interface StatsCardProps {
   className?: string;
 }
 
-async function CardStatsWrapper() {
+export async function CardStatsWrapper() {
   const data = await getFormStats();
   return <StatsCards data={data} loading={false} />;
 }
 
-function StatsCards(props: StatsCardsProps) {
+export function StatsCards(props: StatsCardsProps) {
   const { data, loading } = props;
 
   return (
-    <div className="w-full pt-8 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    <div className="w-full pt-8 gap-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 ">
       <StatsCard
         title="Total Visits"
         icon={<LucideView className="text-blue-600" />}
@@ -36,11 +41,35 @@ function StatsCards(props: StatsCardsProps) {
         loading={loading}
         className="shadow-md shadow-blue-600"
       />
+      <StatsCard
+        title="Total Submissions"
+        icon={<ClipboardListIcon className="text-yellow-600" />}
+        helperText="Visits that result in  form submission"
+        value={data?.submissions?.toLocaleString() || ""}
+        loading={loading}
+        className="shadow-md shadow-yellow-600"
+      />
+      <StatsCard
+        title="Submission Rate"
+        icon={<MousePointerClickIcon className="text-green-600" />}
+        helperText="Percentage of visits that result in form submission"
+        value={data?.submissionRate?.toLocaleString() || ""}
+        loading={loading}
+        className="shadow-md shadow-green-600"
+      />
+      <StatsCard
+        title="Bounce Rate"
+        icon={<TrendingUpDownIcon className="text-red-600" />}
+        helperText="Visits that leaves without interacting"
+        value={data?.bounceRate?.toLocaleString() || ""}
+        loading={loading}
+        className="shadow-md shadow-red-600"
+      />
     </div>
   );
 }
 
-function StatsCard({
+export function StatsCard({
   title,
   icon,
   helperText,
@@ -50,14 +79,22 @@ function StatsCard({
 }: StatsCardProps) {
   return (
     <Card className={className}>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between pb-2">
+        <CardTitle className="text-sm font-medium text-muted-foreground">
+          {title}
+        </CardTitle>
         {icon}
       </CardHeader>
       <CardContent>
         <div className="text-2xl font-bold">
-          {loading && <Skeleton>0</Skeleton>}
+          {loading && (
+            <Skeleton>
+              <span className="opacity-0">0</span>
+            </Skeleton>
+          )}
+          {!loading && value}
         </div>
+        <p className="text-xs text-muted-foreground pt-1">{helperText}</p>
       </CardContent>
     </Card>
   );
