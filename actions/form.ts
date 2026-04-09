@@ -40,5 +40,24 @@ export async function createForm(data: FormSchema) {
   if (!validation.success) {
     throw new Error(validation.error.message);
   }
-  console.log("Creating form with data:", data.name);
+  const user = await currentUser();
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const { name, description } = data;
+
+  const form = await prisma.form.create({
+    data: {
+      userId: user.id,
+      name,
+      description,
+    },
+  });
+
+  if (!form) {
+    throw new Error("Form creation failed");
+  }
+
+  return form.id;
 }

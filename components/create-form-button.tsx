@@ -10,20 +10,13 @@ import {
   DialogTrigger,
   DialogTitle,
 } from "./ui/dialog";
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldGroup,
-  FieldLabel,
-} from "./ui/field";
+import { Field, FieldError, FieldGroup, FieldLabel } from "./ui/field";
 import { Spinner } from "./ui/spinner";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import * as z from "zod";
 import { FormSchema, formSchema } from "@/schemas/form";
 import { createForm } from "@/actions/form";
 
@@ -38,7 +31,7 @@ function CreateFormButton() {
 
   async function onSubmit(data: FormSchema) {
     try {
-      await createForm(data);
+      const formId = await createForm(data);
       toast("Form created successfully!", {
         description: "Your form has been created.",
       });
