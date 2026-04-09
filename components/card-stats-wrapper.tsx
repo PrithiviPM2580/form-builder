@@ -161,7 +161,7 @@ export function FormCard({ form }: { form: Form }) {
           </Button>
         )}
         {!form.published && (
-          <Button asChild className="w-full text-md gap-4">
+          <Button asChild variant="secondary" className="w-full text-md gap-4">
             <Link href={`/builder/${form.id}`}>
               Edit form <Edit />
             </Link>

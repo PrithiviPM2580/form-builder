@@ -20,8 +20,10 @@ import { Textarea } from "./ui/textarea";
 import { FormSchema, formSchema } from "@/schemas/form";
 import { createForm } from "@/actions/form";
 import { FileOutputIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 function CreateFormButton() {
+  const router = useRouter();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,6 +38,7 @@ function CreateFormButton() {
       toast("Form created successfully!", {
         description: "Your form has been created.",
       });
+      router.push(`/builder/${formId}`);
       console.log("Form created with ID:", formId);
     } catch (error) {
       toast("An error occurred while creating the form. Please try again.", {
