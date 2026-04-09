@@ -1,14 +1,27 @@
 import { getForms, getFormStats } from "@/actions/form";
 import {
+  ArrowRight,
   ClipboardListIcon,
+  Edit,
   LucideView,
   MousePointerClickIcon,
   TrendingUpDownIcon,
 } from "lucide-react";
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { Form } from "@/lib/generated/prisma/client";
+import { Badge } from "./ui/badge";
+import { formatDistance } from "date-fns";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 interface StatsCardsProps {
   data?: Awaited<ReturnType<typeof getFormStats>>;
@@ -121,12 +134,40 @@ export function FormCard({ form }: { form: Form }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          <span className="flex items-center gap-2 justify-between">
-            {form.name}
-          </span>
+        <CardTitle className="flex items-center gap-2 justify-between">
+          <span className="truncate font-bold">{form.name}</span>
+          {form.published && <Badge>Published</Badge>}
+          {!form.published && <Badge variant="destructive">Draft</Badge>}
         </CardTitle>
+        <CardDescription className="flex items-center justify-between text-muted-foreground text-sm">
+          {formatDistance(form.createdAt, new Date(), { addSuffix: true })}
+          {form.published && (
+            <span className="flex items-center gap-2">
+              <LucideView className="text-muted-foreground" />
+              <span>{form.visits?.toLocaleString()} </span>
+              <ClipboardListIcon className="text-muted-foreground" />
+              <span>{form.submissions?.toLocaleString()}</span>
+            </span>
+          )}
+        </CardDescription>
       </CardHeader>
+      <CardContent>{form.description || "No description"}</CardContent>
+      <CardFooter>
+        {form.published && (
+          <Button asChild className="w-full text-md gap-4">
+            <Link href={`/forms/${form.id}`}>
+              View submissions <ArrowRight />
+            </Link>
+          </Button>
+        )}
+        {!form.published && (
+          <Button asChild className="w-full text-md gap-4">
+            <Link href={`/builder/${form.id}`}>
+              Edit form <Edit />
+            </Link>
+          </Button>
+        )}
+      </CardFooter>
     </Card>
   );
 }
