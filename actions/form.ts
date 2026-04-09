@@ -2,6 +2,7 @@
 
 import { currentUser } from "@clerk/nextjs/server";
 import { prisma } from "@/lib/prisma";
+import { formSchema, FormSchema } from "@/schemas/form";
 
 export async function getFormStats() {
   const user = await currentUser();
@@ -32,4 +33,12 @@ export async function getFormStats() {
     submissionRate,
     bounceRate,
   };
+}
+
+export async function createForm(data: FormSchema) {
+  const validation = formSchema.safeParse(data);
+  if (!validation.success) {
+    throw new Error(validation.error.message);
+  }
+  console.log("Creating form with data:", data.name);
 }

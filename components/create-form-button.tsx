@@ -18,20 +18,17 @@ import {
   FieldLabel,
 } from "./ui/field";
 import { Spinner } from "./ui/spinner";
-
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import * as z from "zod";
-
-const formSchema = z.object({
-  name: z.string().min(4, "Form name must be at least 4 characters long"),
-  description: z.string().optional(),
-});
+import { FormSchema, formSchema } from "@/schemas/form";
+import { createForm } from "@/actions/form";
 
 function CreateFormButton() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -39,7 +36,18 @@ function CreateFormButton() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof formSchema>) {}
+  async function onSubmit(data: FormSchema) {
+    try {
+      await createForm(data);
+      toast("Form created successfully!", {
+        description: "Your form has been created.",
+      });
+    } catch (error) {
+      toast("An error occurred while creating the form. Please try again.", {
+        description: "Error creating form",
+      });
+    }
+  }
 
   return (
     <Dialog>
@@ -100,9 +108,7 @@ function CreateFormButton() {
         </form>
         <DialogFooter>
           <Button
-            onClick={() => {
-              form.handleSubmit(onSubmit);
-            }}
+            onClick={form.handleSubmit(onSubmit)}
             disabled={form.formState.isSubmitting}
             className="w-full mt-4"
           >
