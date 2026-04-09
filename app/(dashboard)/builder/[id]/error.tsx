@@ -19,10 +19,10 @@ function ErrorPage({ error, reset }: { error: Error; reset: () => void }) {
   }, [error]);
 
   return (
-    <div className="relative flex min-h-dvh items-center justify-center overflow-hidden px-4 py-10">
+    <div className="relative w-full overflow-hidden px-4 py-8">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(90%_60%_at_20%_10%,hsl(var(--destructive)/0.12),transparent_55%),radial-gradient(90%_60%_at_80%_90%,hsl(var(--primary)/0.12),transparent_55%)]" />
 
-      <Card className="relative w-full max-w-lg border border-border/60 bg-background/95 backdrop-blur">
+      <Card className="relative mx-auto w-full max-w-lg border border-border/60 bg-background/95 backdrop-blur">
         <CardHeader className="space-y-2 text-center">
           <div className="flex h-12 w-12 mx-auto items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
             <AlertTriangleIcon className="h-6 w-6" />
