@@ -19,6 +19,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { FormSchema, formSchema } from "@/schemas/form";
 import { createForm } from "@/actions/form";
+import { FileOutputIcon } from "lucide-react";
 
 function CreateFormButton() {
   const form = useForm<FormSchema>({
@@ -35,6 +36,7 @@ function CreateFormButton() {
       toast("Form created successfully!", {
         description: "Your form has been created.",
       });
+      console.log("Form created with ID:", formId);
     } catch (error) {
       toast("An error occurred while creating the form. Please try again.", {
         description: "Error creating form",
@@ -45,7 +47,15 @@ function CreateFormButton() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>Create new form</Button>
+        <Button
+          variant="outline"
+          className="group border border-primary/20 h-47.5 items-center justify-center flex flex-col hover:border-primary hover:cursor-pointer border-dashed gap-4"
+        >
+          <FileOutputIcon className="h-8 w-8 text-muted-foreground group-hover:text-primary" />
+          <p className="font-bold text-xl text-muted-foreground group-hover:text-primary">
+            Create new form
+          </p>
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
