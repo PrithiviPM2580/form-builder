@@ -1,4 +1,4 @@
-import { getFormStats } from "@/actions/form";
+import { getForms, getFormStats } from "@/actions/form";
 import {
   ClipboardListIcon,
   LucideView,
@@ -8,6 +8,7 @@ import {
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
+import { Form } from "@/lib/generated/prisma/client";
 
 interface StatsCardsProps {
   data?: Awaited<ReturnType<typeof getFormStats>>;
@@ -96,6 +97,36 @@ export function StatsCard({
         </div>
         <p className="text-xs text-muted-foreground pt-1">{helperText}</p>
       </CardContent>
+    </Card>
+  );
+}
+
+export function FormCardsSkeleton() {
+  return <Skeleton className="border-2 border-primary/20 h-47.5 w-full" />;
+}
+
+export async function FormCards() {
+  const forms = await getForms();
+
+  return (
+    <>
+      {forms.map((form) => (
+        <FormCard key={form.id} form={form} />
+      ))}
+    </>
+  );
+}
+
+export function FormCard({ form }: { form: Form }) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>
+          <span className="flex items-center gap-2 justify-between">
+            {form.name}
+          </span>
+        </CardTitle>
+      </CardHeader>
     </Card>
   );
 }
