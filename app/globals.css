@@ -128,3 +128,13 @@
     @apply font-sans;
   }
 }
+
+@layer utilities {
+  .graph-paper-bg {
+    background-image: url("/graph-paper.svg");
+  }
+
+  .dark .graph-paper-bg {
+    background-image: url("/graph-paper-dark.svg");
+  }
+}

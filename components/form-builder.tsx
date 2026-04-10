@@ -22,6 +22,7 @@ function FormBuilder({ form }: { form: Form }) {
           )}
         </div>
       </nav>
+      <div className="graph-paper-bg flex w-full grow items-center justify-center relative overflow-y-auto h-[88vh] bg-accent"></div>
     </main>
   );
 }
