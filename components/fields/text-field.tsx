@@ -21,7 +21,7 @@ export const TextFieldFormElement: FormElement = {
     icon: ALargeSmall,
     label: "Text Field",
   },
-  designerComponent: () => <div>TextField Designer</div>,
+  designerComponent: () => <div className="text-white">TextField Designer</div>,
   formComponent: () => <div>TextField Form</div>,
   propertiesComponent: () => <div>TextField Properties</div>,
 };
