@@ -2,7 +2,12 @@
 
 import { cn, idGenerator } from "@/lib/utils";
 import DesignerSidebar from "./designer-sidebar";
-import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
+import {
+  DragEndEvent,
+  useDndMonitor,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
 import useDesigner from "@/hooks/use-designer";
 import { ElementsType, FormElementInstance, FormElements } from "@/types";
 import { useState } from "react";
@@ -87,9 +92,23 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
       isBottomHalfDesignerElement: true,
     },
   });
+
+  const draggable = useDraggable({
+    id: element.id + "-drag-handler",
+    data: {
+      type: element.type,
+      elementId: element.id,
+      isDesignerElement: true,
+    },
+  });
+
+  if (draggable.isDragging) return null;
   const DesignerElement = FormElements[element.type].designerComponent;
   return (
     <div
+      ref={draggable.setNodeRef}
+      {...draggable.listeners}
+      {...draggable.attributes}
       className="relative h-30 flex flex-col text-foreground hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
       onMouseEnter={() => setMouseIsOver(true)}
       onMouseLeave={() => setMouseIsOver(false)}
@@ -120,7 +139,13 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
           </div>
         </>
       )}
-      <div className="flex w-full h-30 items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none">
+      <div
+        className={cn(
+          "flex w-full h-30 items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none",
+          mouseIsOver && "opacity-30",
+          topHalf.isOver && "border-t-4 border-t-foreground",
+        )}
+      >
         <DesignerElement elementInstance={element} />
       </div>
     </div>
