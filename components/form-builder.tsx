@@ -1,29 +1,37 @@
+"use client";
+
 import { Form } from "@/lib/generated/prisma/client";
 import React from "react";
 import PreviewDialogBtn from "./preview-dialog-btn";
 import SaveFormBtn from "./save-form-btn";
 import PublishFormBtn from "./publish-form-btn";
+import Designer from "./designer";
+import { DndContext } from "@dnd-kit/core";
 
 function FormBuilder({ form }: { form: Form }) {
   return (
-    <main className="flex flex-col w-full">
-      <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
-        <h2 className="truncate font-medium">
-          <span className="text-muted-foreground mr-2">Form:</span>
-          {form.name}
-        </h2>
-        <div className="flex items-center gap-2">
-          <PreviewDialogBtn />
-          {!form.published && (
-            <>
-              <SaveFormBtn />
-              <PublishFormBtn />
-            </>
-          )}
+    <DndContext>
+      <main className="flex flex-col w-full">
+        <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
+          <h2 className="truncate font-medium">
+            <span className="text-muted-foreground mr-2">Form:</span>
+            {form.name}
+          </h2>
+          <div className="flex items-center gap-2">
+            <PreviewDialogBtn />
+            {!form.published && (
+              <>
+                <SaveFormBtn />
+                <PublishFormBtn />
+              </>
+            )}
+          </div>
+        </nav>
+        <div className="graph-paper-bg flex w-full grow items-center justify-center relative overflow-y-auto h-[88vh] bg-accent">
+          <Designer />
         </div>
-      </nav>
-      <div className="graph-paper-bg flex w-full grow items-center justify-center relative overflow-y-auto h-[88vh] bg-accent"></div>
-    </main>
+      </main>
+    </DndContext>
   );
 }
 
